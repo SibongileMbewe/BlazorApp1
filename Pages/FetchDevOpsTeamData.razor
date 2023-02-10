@@ -1,0 +1,50 @@
+﻿@page "/FetchDevOpsTeamData"
+
+<PageTitle>DevOps Team Data</PageTitle>
+
+@using BlazorApp1.Data
+@inject DevOpsTeamService devOpsService
+
+<h1>@Title2</h1>
+<p>This component demonstrates fetching DevOps Team data from a DevOpsTeamService.</p>
+
+@if (devOpsTeams == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Employee Code</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Designation</th>
+            </tr>
+            
+            @foreach (var item in devOpsTeams)
+            {
+
+                <tr>
+                    @*<td>@item.Id</td>*@
+                    <th>@item.EmployeeCode</th>
+                    <th>@item.FirstName</th>
+                    <th>@item.LastName</th>
+                    <th>@item.Designation</th>
+                </tr>
+            }
+        </thead>
+    </table>
+}
+
+@code {
+    [Parameter]
+    public string Title2 { get; set; } = "";
+    private DevOpsTeam[]? devOpsTeams;
+
+    protected override async Task OnInitializedAsync()
+    {
+        devOpsTeams = await devOpsService.DevAsync();
+    }
+}

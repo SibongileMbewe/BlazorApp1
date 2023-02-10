@@ -1,0 +1,52 @@
+﻿@page "/"
+
+
+<select @onchange="dropdownChange">
+    <option value="">Select a value</option>
+    <option value="@nameof(Counter)">Counter</option>
+    <option value="@nameof(FetchData)">FetchData</option>
+    <option value="@nameof(FetchDevOpsTeamData)">FetchDevOpsTeamData</option>
+</select>
+<br />
+<br />
+
+@if (type is not null)
+{
+    <DynamicComponent Type="type" Parameters="@components[type.Name].Parameters" />
+}
+
+@code {
+    private Type? type;
+    private Type? type2;
+    private Dictionary<string, ComponentMetadata> components =
+    new()
+    {
+        {
+            "Counter",
+            new ComponentMetadata
+            {
+                Parameters = new Dictionary<string, object>(){{"Title", "Counter Demo"},
+            {"currentCount", 10}}
+            }
+        },
+        {
+            "FetchData",
+            new ComponentMetadata
+            {
+                Parameters = new Dictionary<string, object>(){{"Title", "Weather forecast"}}
+            }
+        },
+        {
+                "FetchDevOpsTeamData",
+                new ComponentMetadata
+                {
+                     Parameters = new Dictionary<string, object>(){{"Title2","DevOps Team"}}
+                }
+        }
+    };
+
+    private void dropdownChange(ChangeEventArgs e)
+    {
+        type = e.Value?.ToString()?.Length > 0 ? Type.GetType($"BlazorApp1.Pages.{e.Value}") : null;
+    }
+}
